@@ -3,35 +3,75 @@ import {Link} from 'react-router-dom'
 import PageDefault from '../../../PageDefault';
 
 function CadastroCategoria (){
-    const [categorias, setCategorias] = useState(['Teste']);
-    const [nomeDaCategoria, setNomeDaCategoria] = useState('Filmes');
+    const [categorias, setCategorias] = useState([]);
+
+    const valoresIniciais = {
+        nome: '',
+        descricao: '',
+        cor: '#000',
+    } // aqui criamos um objetos onde passamos todas as informações enviadas pelo form, ao inves de criar um "useState" p cada campo
+    const [values, setValues] = useState(valoresIniciais);
+
+    function setValue(chave, valor) {
+        //chave: nome, descricao, etc
+        setValues({
+            ...values,
+            [chave]: valor, // nome: 'valor' que vai ser recebido pelo input
+        })
+    }
+
+    function handleChange(infosDoEvento) {
+        const {getAttribute, value } = infosDoEvento.target;
+        setValue(getAttribute('name'), value);
+    }
 
     return (
         <PageDefault>
-            <h1> Cadastro de Categoria: {nomeDaCategoria} </h1>
+            <h1> Cadastro de Categoria: {values.nome} </h1>
 
             <form onSubmit={function handleSubmit(infosDoEvento){
                 infosDoEvento.preventDefault(); // aqui impedimos o reload da página, na hora que o usuário faz o submit no form, respeitando a estrutura SPA
                 setCategorias([
                     ...categorias,
-                    nomeDaCategoria   // aqui é uma lista e nela colocamos todas as categorias já existentes
+                    values   // aqui é uma lista e nela colocamos todas as categorias já existentes
                 ]);
             }}>
-                <label>
-                    Nome da categoria:
-                    <input type="text" value={nomeDaCategoria} onChange={function handler(infosDoEvento) {
-                        setNomeDaCategoria(infosDoEvento.target.value);
-                    } } />
-                </label>
+
+                <div> 
+                    <label>
+                        Nome da categoria:
+                        <input type="text" name="nome" value={values.nome} onChange={handleChange} />
+                    </label>
+                </div>
+
+                <br />
+
+                <div>
+                    <label>
+                        Descrição:
+                        <textarea type="text" name="descricao" value={values.descricao} onChange={handleChange} />
+                    </label>
+                </div>
+
+                <br />
+
+                <div>
+                    <label>
+                        Cor:
+                        <input type="color" name="cor" value={values.cor} onChange={handleChange} />
+                    </label>
+                </div>
+
+                <br />
 
                 <button> Cadastrar</button>
             </form>
 
             <ul> 
-                {categorias.map((categoria) =>{ // aqui listamos todos os dados já cadastrados
+                {categorias.map((categoria, indice) =>{ // aqui listamos todos os dados já cadastrados e vamos configurar a  para não dar erro quando houver duplicidade de valor
                     return (
-                        <li key={categoria}>
-                            {categoria}
+                        <li key={`${categoria}${indice}`}> 
+                            {categoria.nome}
                         </li>
                     )
                 })}
