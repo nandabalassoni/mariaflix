@@ -3,13 +3,13 @@ import {Link} from 'react-router-dom'
 import PageDefault from '../../../PageDefault';
 
 function CadastroCategoria (){
-    const [categorias, setCategorias] = useState([]);
-
     const valoresIniciais = {
         nome: '',
         descricao: '',
-        cor: '#000',
+        cor: '',
     } // aqui criamos um objetos onde passamos todas as informações enviadas pelo form, ao inves de criar um "useState" p cada campo
+    
+    const [categorias, setCategorias] = useState([]);
     const [values, setValues] = useState(valoresIniciais);
 
     function setValue(chave, valor) {
@@ -35,6 +35,8 @@ function CadastroCategoria (){
                     ...categorias,
                     values   // aqui é uma lista e nela colocamos todas as categorias já existentes
                 ]);
+
+                setValues(valoresIniciais)
             }}>
 
                 <div> 
